@@ -22,7 +22,19 @@ class ProductListView(APIView):
     
     def get(self, request, *args, **kwargs):
         ret = []
-        products = Product.objects.all().order_by('id')
+        # QuerySet - 여러개의 결과 값을 가져오는 것
+        products = Product.objects.all()
+
+        if 'price' in request.query_params:
+            price = request.query_params['price']
+            products = products.filter(price__lte=price)
+
+        if 'name' in request.query_params:
+            name = request.query_params['name']
+            products = products.filter(name__contains=name)
+
+
+        products = products.order_by('id')
 
         for product in products:
             p = {
@@ -71,10 +83,14 @@ class ProductDetailView(APIView):
     # 값을 수정한 결과를 database에 반영 (save 함수)
     def put(self, request, pk, *args, **kwargs):
         product = Product.objects.get(pk=pk)
-        dirty = False # 변하는지 확인 변수
+        dirty = False # 수정 여부 확인하는 변수
 
+        # field가 Product에 없는 값이 와야 한다.
+        # save라는 field가 생기면 save 함수를 사용할 수 없어짐
         for field, value in request.data.items():
-            # getattr() 값을 가지고 옴 (하나라도 True인 경우)
+            if field not in [f.name for f in product._meta.get_fields()]:
+                continue
+            # getattr() 값을 가지고 옴 (수정된 게 하나라도 있으면 dirty = True)
             dirty = dirty or (value != getattr(product, field))
             setattr(product, field, value) 
         
