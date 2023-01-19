@@ -129,4 +129,14 @@ SILENCED_SYSTEM_CHECKS = ['urls.W002']
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10, 
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
+}
+
+import datetime
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=2), # 접속 시간 2시간 비활동시 자동 로그아웃
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1), # 만료된 토큰 갱신 (요청시 갱신)
+    "AUTH_HEADER_TYPES": ("JWT", ),
 }

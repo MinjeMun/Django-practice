@@ -25,9 +25,7 @@ class ProductListView(
 
 
     def get(self, request, *args, **kwargs):
-        # Queryset
-        # Serialize
-        # return Response
+        print(request.user)
         return self.list(request, args, kwargs)
 
     def post(self, request, *args, **kwargs):
