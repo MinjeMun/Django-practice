@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'product.apps.ProductConfig'
+    'product.apps.ProductConfig',
+    'member.apps.MemberConfig',
 ]
 
 MIDDLEWARE = [
@@ -139,4 +140,9 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=2), # 접속 시간 2시간 비활동시 자동 로그아웃
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1), # 만료된 토큰 갱신 (요청시 갱신)
     "AUTH_HEADER_TYPES": ("JWT", ),
+}
+
+AUTH_USER_MODEL = "member.Member" # 모델 지정
+AUTHENTICATION_BACKENDS = { # 인증 시도할 때 권한 확인
+    "member.auth.MemberAuth" 
 }

@@ -15,7 +15,11 @@ class ProductListView(
 
 
     def get_queryset(self):
-        products = Product.objects.all()
+        if self.request.user.is_authenticated: # 로그인 검사
+            products = Product.objects.all()
+        else:
+            products = Product.objects.none()
+        
         name = self.request.query_params.get('name')
 
         if name:
